@@ -11,6 +11,7 @@ from model.classifier import Classifier
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
+pixels = 784
 
 
 class Perceptron(Classifier):
@@ -56,6 +57,21 @@ class Perceptron(Classifier):
             Print logging messages with validation accuracy if verbose is True.
         """
 
+        # iterate over all images
+        for x in range(0, 1000):
+            #boolean
+            fired = self.fire(self.trainingSet.input[x])
+            firedInt = 0
+            if(fired):
+                firedInt = 1
+            #int, 1 if it is a 7 otherwise 0
+            expected = self.trainingSet.label[x]
+            factor = expected - firedInt
+            #not sure if decision is the right parameter here
+            decision = self.decisionFunction(self.trainingSet.input[x])
+            for weightEntry in range(0, pixels):
+                weightChange = self.learningRate * self.trainingSet.input[x][weightEntry] * factor
+                self.weight[weightEntry] += weightChange
         # Here you have to implement the Perceptron Learning Algorithm
         # to change the weights of the Perceptron
         pass
@@ -72,9 +88,17 @@ class Perceptron(Classifier):
         bool :
             True if the testInstance is recognized as a 7, False otherwise.
         """
+        
+
         # Here you have to implement the classification for one instance,
         # i.e., return True if the testInstance is recognized as a 7,
         # False otherwise
+
+        # decisionValue = 0
+        # for x in range(0, 783):
+        #     decisionValue += self.weight[x]*testInstance[x]
+        # print decisionValue
+        return self.decisionFunction(testInstance)
         pass
 
     def evaluate(self, test=None):
@@ -103,3 +127,9 @@ class Perceptron(Classifier):
         """Fire the output of the perceptron corresponding to the input """
         # I already implemented it for you to see how you can work with numpy
         return Activation.sign(np.dot(np.array(input), self.weight))
+
+    def decisionFunction(self, pixel):
+        returnValue = 0
+        for x in range(0, pixel.size):
+            returnValue += pixel[x]*self.weight[x]
+        return returnValue;
