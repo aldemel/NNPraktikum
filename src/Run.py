@@ -49,10 +49,10 @@ def main():
     print("\nResult of the Perceptron recognizer:")
     evaluator.printComparison(data.testSet, perceptronPred)
 #    Uncomment this to make your Perceptron evaluated
-#    evaluator.printAccuracy(data.testSet, perceptronPred)
+    evaluator.printAccuracy(data.testSet, perceptronPred)
 
-#    eval.printConfusionMatrix(data.testSet, pred)
-#    eval.printClassificationResult(data.testSet, pred, target_names)
+    evaluator.printConfusionMatrix(data.testSet, perceptronPred)
+#    evaluator.printClassificationResult(data.testSet, perceptronPred, target_names)
 
 if __name__ == '__main__':
     main()
