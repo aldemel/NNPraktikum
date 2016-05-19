@@ -35,7 +35,7 @@ class Perceptron(Classifier):
     testSet : list
     weight : list
     """
-    def __init__(self, train, valid, test, learningRate=0.01, epochs=50):
+    def __init__(self, train, valid, test, learningRate=0.010, epochs=50):
 
         self.learningRate = learningRate
         self.epochs = epochs
@@ -47,6 +47,7 @@ class Perceptron(Classifier):
         # Initialize the weight vector with small random values
         # around 0 and 0.1
         self.weight = np.random.rand(self.trainingSet.input.shape[1])/10
+        self.w0 = 0.1
 
     def train(self, verbose=True):
         """Train the perceptron with the perceptron learning algorithm.
@@ -58,13 +59,14 @@ class Perceptron(Classifier):
         """
 
         # iterate over all images
-        for x in range(0, 1000):
-            self.trainWeightsWithImage(self.trainingSet.input[x], self.trainingSet.label[x])
-
-        # Here you have to implement the Perceptron Learning Algorithm
-        # to change the weights of the Perceptron
-        pass
-
+        for epoc in range(0, self.epochs):
+            # Variante mit update für jedes Bild
+            for x in range(0, self.trainingSet.input.size/pixels -1):
+                self.trainWeightsWithImage(self.trainingSet.input[x],
+                                           self.trainingSet.label[x])
+                
+                # variante mit update nach sichtung aller Bilder
+#            self.trainWeightsForAllImages(self.trainingSet)
     def classify(self, testInstance):
         """Classify a single instance.
 
@@ -77,18 +79,12 @@ class Perceptron(Classifier):
         bool :
             True if the testInstance is recognized as a 7, False otherwise.
         """
-        
-
-        # Here you have to implement the classification for one instance,
-        # i.e., return True if the testInstance is recognized as a 7,
-        # False otherwise
 
         decision = self.decisionFunction(testInstance)
         if(decision > 0):
             return 1
         else:
             return 0
-        pass
 
     def evaluate(self, test=None):
         """Evaluate a whole dataset.
@@ -106,10 +102,6 @@ class Perceptron(Classifier):
         if test is None:
             test = self.testSet.input
 
-        # Here is the map function of python - a functional programming concept
-        # It applies the "classify" method to every element of "test"
-        # Once you can classify an instance, just use map for all of the test
-        # set.
         return list(map(self.classify, test))
 
     def fire(self, input):
@@ -118,13 +110,23 @@ class Perceptron(Classifier):
         return Activation.sign(np.dot(np.array(input), self.weight))
 
     def decisionFunction(self, pixel):
-        returnValue = 0
-        for x in range(0, pixel.size):
-            returnValue += pixel[x]*self.weight[x]
+        returnValue = self.w0
+        returnValue += np.dot(np.array(pixel), self.weight)
         return returnValue;
 
     def trainWeightsWithImage(self, image, label):
         classifiedValue = self.classify(image)
-        for pixel in range(0, pixels):
-            self.weight[pixel] += self.learningRate * (label -
-                                                       classifiedValue) * image[pixel]
+        self.w0 += self.learningRate * (label - classifiedValue)
+        delta = np.multiply(label - classifiedValue, image)
+        delta = np.multiply(self.learningRate, delta)
+        self.weight = np.add(self.weight, delta)
+
+#    def trainWeightsForAllImages(trainingSet):
+#        weightUpdate = (0..0)
+#        for image in range(0, trainingSet.input.size):
+#            classifiedValue = self.classify(trainingSet.input[image])
+            
+#            for(pixel in range(0, pixels):
+#                weightUpdate[pixel] += self.learningRate * (label -
+#                classifiedValue) * self.trainingSet.input[pixel]
+    
