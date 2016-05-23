@@ -7,6 +7,8 @@ import numpy as np
 
 from util.activation_functions import Activation
 from model.classifier import Classifier
+from model.logistic_layer import LogisticLayer
+from model.network import Network
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
@@ -41,8 +43,8 @@ class LogisticRegression(Classifier):
         self.trainingSet = train
         self.validationSet = valid
         self.testSet = test
-        self.network[0] = LogisticLayer(785, 1, is_classifier_layer = True)
-
+        self.network = Network()
+        
     def train(self, verbose=True):
         """Train the Logistic Regression.
         Parameters
@@ -52,7 +54,7 @@ class LogisticRegression(Classifier):
         """
 
         # Here you have to implement training method "epochs" times
-        # Please using LogisticLayer class
+        # TODO Please using LogisticLayer class
         pass
 
     def classify(self, testInstance):
