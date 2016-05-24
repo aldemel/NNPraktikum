@@ -43,7 +43,7 @@ class LogisticRegression(Classifier):
         self.trainingSet = train
         self.validationSet = valid
         self.testSet = test
-        self.network = Network()
+        self.network = Network(learningRate)
         
     def train(self, verbose=True):
         """Train the Logistic Regression.
@@ -54,7 +54,8 @@ class LogisticRegression(Classifier):
         """
 
         # Here you have to implement training method "epochs" times
-        # TODO Please using LogisticLayer class
+        # Please using LogisticLayer class
+        self.network.train(self.trainingSet.input, self.trainingSet.label)
         pass
 
     def classify(self, testInstance):
@@ -70,8 +71,7 @@ class LogisticRegression(Classifier):
 
         # Here you have to implement classification method given an
         # instance
-        self.network
-        pass
+        return self.network.classify(testInstance)
 
     def evaluate(self, test=None):
         """Evaluate a whole dataset.

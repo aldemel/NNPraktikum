@@ -1,0 +1,32 @@
+class Network:
+
+
+    layers 
+
+
+    
+    """
+    layertype
+    nlayer
+    narray int nneuronsPerLayer, at neuronsPL[0] it denotes the size of
+    the input vector, so neuronsPL.size is one more than the
+    number of layers
+    """
+    def __init__(self, layertype=´logisticLayer´, neuronsPL):
+        self.layertype = layertype
+        self.nlayer = nlayer
+        self.neuronsPL = neuronsPL
+        if layertype is "LogisticLayer":
+            for layerIndex in range(1, neuronsPL.size-1):
+                layers[layerIndex] = LogisticLayer(neuronsPL[layerIndex-1],
+                                                   neuronsPL[layerIndex])
+
+            layers[neuronsPL.size - 1] = LogisticLayer(neuronsPL[neuronsPL.size - 2],
+                                                       neuronsPL[neuronsPL.size - 1],
+                                                       is_classifier_layer=True)
+
+    def train(self, inputImages, inputTargets):
+        pass
+        
+    def evaluate(self, inputImage):
+        pass

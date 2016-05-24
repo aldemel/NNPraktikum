@@ -39,7 +39,7 @@ class LogisticLayer():
 
         # Get activation function from string
         self.activation_string = activation
-        self.activation = Activation.getActivation(self.activation_string)
+        self.activation = Activation.get_activation(self.activation_string)
 
         self.n_in = n_in
         self.n_out = n_out
@@ -72,7 +72,13 @@ class LogisticLayer():
         outp: ndarray
             a numpy array (1,n_out) containing the output of the layer
         """
-        return self._fire(inp)
+
+        # Here you have to implement the forward pass
+        for outputIndex in range(0, self.n_out):
+            #scalarprodukt
+            foo = numpy.dot(inp, self.weights[outputIndex])
+            outp[outputIndex] = self._fire(foo)
+        return foo
 
     def computeDerivative(self, nextDerivatives, nextWeights):
         """
@@ -90,36 +96,18 @@ class LogisticLayer():
         """
 
         # Here the implementation of partial derivative calculation
-        # wir brauchen: lernrate, inputvektor ji, sigma j, fuer
-        # letzteren: targetvektor und eigenen outputvektor j
-        # targetvektor: woher? evtl nextweight?
+        pass
 
-        first = np.subtract(inputTargets, self.outp)
-        second = np.multiply(first, self.outp)
-        third = np.multiply(second, np.subtract(1, inputTargets))
-        returnvalue = np.multiply(third, self.inp)
-        return returnvalue
-
-    def updateWeights(self, learningRate, nextDerivatives, nextWeights):
+    def updateWeights(self):
         """
         Update the weights of the layer
         """
         # Here the implementation of weight updating mechanism
-        # delta_ij = lernrate * sigma * eingabe_ij
-        # sigma = 
-        if self.is_classifier_layer:
-            derivative = self.computeDerivative(nextDerivatives,
-                                                nextWeights)
-            deltas = np.multiply(learningRate, derivative)
-            self.weights = np.sum(self.weights, deltas)
-        else:
-            pass
+        for w in range(0, weights):
+            
+
+        
+        pass
 
     def _fire(self, inp):
-        #TODO compute a vector containing all sigmoids of neurons
-        ret = np.array
-        print "inp: " + str(inp.shape)
-        print "weights: " + str(self.weights.shape)
-        for i in range(0, self.n_out):
-            ret = np.append(ret, Activation.sigmoid(np.dot(inp, self.weights[:,i])))
-        return ret
+        return Activation.sigmoid(np.dot(np.array(inp), self.weight))
