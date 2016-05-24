@@ -72,6 +72,7 @@ class LogisticLayer():
         outp: ndarray
             a numpy array (1,n_out) containing the output of the layer
         """
+        self.inp = np.append(1, inp)
         return self._fire(inp)
 
     def computeDerivative(self, nextDerivatives, nextWeights):
@@ -94,10 +95,14 @@ class LogisticLayer():
         # letzteren: targetvektor und eigenen outputvektor j
         # targetvektor: woher? evtl nextweight?
 
-        first = np.subtract(inputTargets, self.outp)
-        second = np.multiply(first, self.outp)
-        third = np.multiply(second, np.subtract(1, inputTargets))
-        returnvalue = np.multiply(third, self.inp)
+        if self.is_classifier_layer:
+            first = np.subtract(nextDerivatives, self.outp)
+            second = np.multiply(first, self.outp)
+            sigma = np.multiply(second, np.subtract(1, self.outp))
+        else:
+            #calculate sigma
+            pass
+        returnvalue = np.multiply(sigma, self.inp)
         return returnvalue
 
     def updateWeights(self, learningRate, nextDerivatives, nextWeights):
@@ -111,15 +116,13 @@ class LogisticLayer():
             derivative = self.computeDerivative(nextDerivatives,
                                                 nextWeights)
             deltas = np.multiply(learningRate, derivative)
-            self.weights = np.sum(self.weights, deltas)
+            self.weights = np.add(self.weights, deltas)
         else:
             pass
 
     def _fire(self, inp):
         #TODO compute a vector containing all sigmoids of neurons
-        ret = np.array
-        print "inp: " + str(inp.shape)
-        print "weights: " + str(self.weights.shape)
+        ret = np.zeros(self.n_out)
         for i in range(0, self.n_out):
-            ret = np.append(ret, Activation.sigmoid(np.dot(inp, self.weights[:,i])))
+            ret[i] = Activation.sigmoid(np.dot(np.append(1,inp), self.weights[:,i]))
         return ret

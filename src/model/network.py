@@ -27,22 +27,16 @@ class Network:
             pass
 
     def train(self, inputImages, inputTargets):
-        for image in inputImages:
-            output = self.classify(image)
-            print "out: " + str(output.shape)
-            print str(output.shape)
-            print output[0]
-            print output[1]
-#            print "targets: " + str(inputTargets.shape)
-            error = np.subtract(inputTargets, output)
+        for i in range(0, len(inputImages)):
+            output = self.classify(inputImages[i])
+            error = np.subtract(inputTargets[i], output)
             for layer in range(len(self.layers)-1, -1, -1):
-                self.layers[layer].updateWeights(self.learningRate, 0, 0, inputTargets)
+                self.layers[layer].updateWeights(self.learningRate,
+                                                 inputTargets[i], [1])
         
     def classify(self, inputImage):
-        inp = np.insert(inputImage, 0, 1)
         #move data through all layers
-        print "image: " + str(inp.shape)
+        inp = inputImage
         for layer in self.layers:
             inp = layer.forward(inp)
-        print "image: " + str(inp.shape)
         return inp

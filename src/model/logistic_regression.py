@@ -71,7 +71,11 @@ class LogisticRegression(Classifier):
 
         # Here you have to implement classification method given an
         # instance
-        return self.network.classify(testInstance)
+        res = self.network.classify(testInstance)
+        if res > 0:
+            return 1
+        else:
+            return 0
 
     def evaluate(self, test=None):
         """Evaluate a whole dataset.
