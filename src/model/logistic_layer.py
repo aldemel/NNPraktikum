@@ -73,7 +73,9 @@ class LogisticLayer():
             a numpy array (1,n_out) containing the output of the layer
         """
         self.inp = np.append(1, inp)
-        return self._fire(inp)
+        self.outp = self._fire(inp)
+        print "outp: " + str(self.outp)
+        return self.outp
 
     def computeDerivative(self, nextDerivatives, nextWeights):
         """
@@ -91,14 +93,15 @@ class LogisticLayer():
         """
 
         # Here the implementation of partial derivative calculation
-        # wir brauchen: lernrate, inputvektor ji, sigma j, fuer
-        # letzteren: targetvektor und eigenen outputvektor j
-        # targetvektor: woher? evtl nextweight?
-
         if self.is_classifier_layer:
             first = np.subtract(nextDerivatives, self.outp)
             second = np.multiply(first, self.outp)
             sigma = np.multiply(second, np.subtract(1, self.outp))
+#            print "in:     " + str(nextDerivatives)
+#            print "out:    " + str(self.outp)
+#            print "first:  " + str(first)
+#            print "second: " + str(second)
+            
         else:
             #calculate sigma
             pass
@@ -110,8 +113,6 @@ class LogisticLayer():
         Update the weights of the layer
         """
         # Here the implementation of weight updating mechanism
-        # delta_ij = lernrate * sigma * eingabe_ij
-        # sigma = 
         if self.is_classifier_layer:
             derivative = self.computeDerivative(nextDerivatives,
                                                 nextWeights)

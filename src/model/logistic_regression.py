@@ -35,7 +35,7 @@ class LogisticRegression(Classifier):
     epochs : positive int
     """
 
-    def __init__(self, train, valid, test, learningRate=0.01, epochs=50):
+    def __init__(self, train, valid, test, learningRate=0.1, epochs=50):
 
         self.learningRate = learningRate
         self.epochs = epochs
@@ -55,7 +55,10 @@ class LogisticRegression(Classifier):
 
         # Here you have to implement training method "epochs" times
         # Please using LogisticLayer class
-        self.network.train(self.trainingSet.input, self.trainingSet.label)
+        self.epochs = 1
+        for i in range(0,self.epochs):
+            print i
+            self.network.train(self.trainingSet.input, self.trainingSet.label)
         pass
 
     def classify(self, testInstance):
@@ -72,7 +75,7 @@ class LogisticRegression(Classifier):
         # Here you have to implement classification method given an
         # instance
         res = self.network.classify(testInstance)
-        if res > 0:
+        if res > 0.5:
             return 1
         else:
             return 0

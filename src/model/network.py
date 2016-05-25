@@ -29,10 +29,11 @@ class Network:
     def train(self, inputImages, inputTargets):
         for i in range(0, len(inputImages)):
             output = self.classify(inputImages[i])
-            error = np.subtract(inputTargets[i], output)
             for layer in range(len(self.layers)-1, -1, -1):
+                print inputTargets[i]
                 self.layers[layer].updateWeights(self.learningRate,
-                                                 inputTargets[i], [1])
+                                                 inputTargets[i],
+                                                 [1])
         
     def classify(self, inputImage):
         #move data through all layers
